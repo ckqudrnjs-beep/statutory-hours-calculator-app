@@ -1,98 +1,64 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // 페이지 로드 시 기본값으로 한 번 계산 실행
-    calculateWorkingHours(); 
+document.getElementById('calculateBtn').addEventListener('click', calculateLaborHours);
+
+function calculateLaborHours() {
+    // 1. 입력값 가져오기
+    const baseWage = parseFloat(document.getElementById('baseWage').value) || 0;
+    const weekdayHours = parseFloat(document.getElementById('weekdayHours').value) || 0; // 주 40시간 내 평일 주간 근로
+    const overtimeHours = parseFloat(document.getElementById('overtimeHours').value) || 0; // 연장 근로
+    const nightHours = parseFloat(document.getElementById('nightHours').value) || 0; // 야간 근로
+    const holidayHours = parseFloat(document.getElementById('holidayHours').value) || 0; // 휴일 근로
+
+    // 2. 총 근로 시간 계산 (52시간 준수 여부 판단용)
+    // 주 52시간 계산 시, 휴일 근로도 포함됨 (단, 휴일 근로의 경우 1주 12시간 연장 한도에는 미포함됨을 주의해야 함. 여기서는 단순 총 합산만)
+    const totalWorkingHours = weekdayHours + overtimeHours + nightHours + holidayHours;
+
+    // 3. 수당 계산 (할증률 반영)
+    let totalPay = 0;
+
+    // 3-1. 주간 기본 수당 (평일 40시간 내)
+    totalPay += weekdayHours * baseWage;
+
+    // 3-2. 연장 근로 수당 (1.5배: 기본 1배 + 가산 0.5배)
+    // 연장, 야간, 휴일은 모두 '가산 수당'이 붙으므로, 기본 시급에 할증률을 곱하여 계산
+    totalPay += overtimeHours * baseWage * 1.5;
+
+    // 3-3. 야간 근로 수당 (1.5배: 기본 1배 + 야간 가산 0.5배)
+    // 연장 야간 중복 시 2.0배가 될 수 있으나, 여기서는 단순 야간 할증만 반영
+    totalPay += nightHours * baseWage * 1.5;
+
+    // 3-4. 휴일 근로 수당 (1.5배 또는 2.0배 - 여기서는 8시간 이하 1.5배로 가정)
+    // 8시간 초과 시 2.0배이지만, 계산 단순화를 위해 1.5배로 통일
+    totalPay += holidayHours * baseWage * 1.5;
+
+    // 🚨 4. 주휴수당 계산 (Weekly Holiday Pay - 추가된 로직) 🚨
+    let weeklyHolidayPay = 0;
     
-    // 버튼 클릭 이벤트 리스너 설정
-    document.getElementById('calculateBtn').addEventListener('click', calculateWorkingHours);
-
-    // 입력 필드 변경 시 자동 계산 (UX 개선)
-    const inputs = document.querySelectorAll('.input-section input');
-    inputs.forEach(input => {
-        input.addEventListener('input', calculateWorkingHours);
-    });
-});
-
-function calculateWorkingHours() {
-    // 1. 입력 값 가져오기
-    const workDays = parseInt(document.getElementById('workDays').value) || 0; // 주간 근무 일수
-    const startTime = parseInt(document.getElementById('dailyStartTime').value) || 0; // 시작 시
-    const endTime = parseInt(document.getElementById('dailyEndTime').value) || 0; // 종료 시
-    const breakMinutes = parseInt(document.getElementById('dailyBreak').value) || 0; // 일일 휴게 시간 (분)
-
-    // 유효성 검사
-    if (workDays < 1 || startTime >= endTime) {
-        updateResults(0, 0, false, true); // 유효성 실패 플래그
-        return;
-    }
-
-    // 2. 일일 근무시간 계산 (분 단위)
-    // 하루 총 시간 차이 (분) = (종료 시 - 시작 시) * 60
-    const totalDailyMinutes = (endTime - startTime) * 60; 
-    
-    // 순수 일일 근로 시간 (분) = 총 시간 차이 - 휴게 시간
-    let netDailyWorkingMinutes = totalDailyMinutes - breakMinutes;
-
-    // 근무 시간이 음수이거나 0보다 작을 경우 0으로 처리
-    if (netDailyWorkingMinutes < 0) {
-        netDailyWorkingMinutes = 0;
-    }
-
-    // 3. 주간 근무시간 계산
-    const weeklyWorkingMinutes = netDailyWorkingMinutes * workDays;
-    const weeklyWorkingHours = weeklyWorkingMinutes / 60; // 시간 단위로 변환
-    
-    // 4. 초과 근무 및 위반 여부 판정
-    const standardHours = 40; // 법정 기준 근로시간
-    const maxHours = 52; // 주 52시간 상한제
-    
-    let overtimeHours = 0;
-    let isViolation = false;
-
-    if (weeklyWorkingHours > standardHours) {
-        overtimeHours = weeklyWorkingHours - standardHours; // 40시간 초과분
+    // 주휴수당 조건: 주 15시간 이상 근무 시 비례하여 지급
+    if (weekdayHours >= 15) {
+        // 주휴수당은 '주 40시간'을 기준으로 8시간을 지급함.
+        // 주 40시간 미만 근무 시, (실제 근로시간 / 40) * 8시간으로 비례 계산.
+        const effectiveHours = Math.min(40, weekdayHours); // 주 40시간 이상 근무해도 40시간까지만 반영
+        const proportionalHours = (effectiveHours / 40) * 8; 
+        weeklyHolidayPay = proportionalHours * baseWage;
+        totalPay += weeklyHolidayPay;
     }
     
-    if (weeklyWorkingHours > maxHours) {
-        isViolation = true; // 52시간 초과 시 위반
+    // 5. 52시간 준수 여부 확인
+    let complianceStatus = '';
+    if (totalWorkingHours > 52) {
+        complianceStatus = `<span class="status-violation">52시간 초과 (총 ${totalWorkingHours}시간)</span>`;
+    } else {
+        complianceStatus = `<span class="status-compliant">52시간 준수 (총 ${totalWorkingHours}시간)</span>`;
     }
 
-    // 5. 결과 업데이트
-    updateResults(weeklyWorkingHours, overtimeHours, isViolation, false);
+    // 6. 결과 출력
+    document.getElementById('totalHours').textContent = totalWorkingHours.toFixed(1) + ' 시간';
+    document.getElementById('complianceStatus').innerHTML = complianceStatus;
+    
+    // 💰 주휴수당 포함 최종 수당 표시
+    document.getElementById('totalPay').textContent = formatCurrency(totalPay) + ' 원';
 }
 
-// 결과 영역 업데이트 함수
-function updateResults(weeklyHours, overtimeHours, isViolation, isValid = false) {
-    const weeklyHoursRounded = weeklyHours.toFixed(1);
-    const overtimeHoursRounded = overtimeHours.toFixed(1);
-
-    document.getElementById('weeklyHours').textContent = `${weeklyHoursRounded} 시간`;
-    document.getElementById('overtimeHours').textContent = `${overtimeHoursRounded} 시간`;
-
-    const statusElement = document.getElementById('complianceStatus');
-    const detailElement = document.getElementById('statusDetail');
-
-    if (isValid) {
-         statusElement.textContent = '입력 오류';
-         statusElement.className = 'status-violation';
-         detailElement.innerHTML = `<p class="status-violation">❌ **오류:** 근무 시작 시간은 종료 시간보다 빨라야 하며, 모든 입력값은 유효해야 합니다.</p>`;
-         return;
-    }
-
-    if (isViolation) {
-        statusElement.textContent = '주 52시간 초과 (법 위반)';
-        statusElement.className = 'status-violation';
-        detailElement.innerHTML = `<p class="status-violation">🚨 **경고:** 주간 근로시간이 ${weeklyHoursRounded}시간으로 법정 상한선 52시간을 초과합니다. 연장 근무 시간을 재조정해야 합니다.</p>`;
-    } else if (weeklyHours > 0) {
-        statusElement.textContent = '주 52시간 준수';
-        statusElement.className = 'status-compliant';
-        if (overtimeHours > 0) {
-             detailElement.innerHTML = `<p class="status-compliant">✅ **양호:** 법정 연장 근무 허용 시간(12시간) 내에서 근로시간을 준수하고 있습니다. (연장 ${overtimeHoursRounded}시간)</p>`;
-        } else {
-             detailElement.innerHTML = `<p class="status-compliant">✅ **양호:** 법정 기준 근로시간(40시간) 내에서 준수하고 있습니다.</p>`;
-        }
-    } else {
-        statusElement.textContent = '미확인';
-        statusElement.className = '';
-        detailElement.innerHTML = `<p>입력값을 기준으로 주간 근로시간을 계산합니다.</p>`;
-    }
+function formatCurrency(amount) {
+    return amount.toLocaleString('ko-KR', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
 }
