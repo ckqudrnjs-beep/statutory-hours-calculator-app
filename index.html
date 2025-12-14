@@ -6,17 +6,151 @@
     
     <meta name="google-site-verification" content="xzkheGRMivderCUCnHm9B8_Z2FEEcHmpLd70ckO_oAA" /> 
     
-    <title>주 52시간 법정 근로시간 계산기: 초과 근무 위반 여부 확인</title>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4425383241428989"
+     crossorigin="anonymous"></script>
+    
+    <title>근로시간 계산기: 주 52시간 근무제 준수 여부 및 연장 근로 수당 계산</title>
     <link rel="icon" href="/favicon.ico?v=1">
-    <link rel="stylesheet" href="style.css">
+    
+    <style>
+        :root {
+            --primary-color: #1abc9c;
+            --secondary-bg: #f5f5f5;
+            --text-color: #333;
+            --border-color: #ddd;
+            --light-border: #eee;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fff;
+            color: var(--text-color);
+            line-height: 1.6;
+            word-break: break-word; 
+            word-wrap: break-word; 
+            padding-bottom: 0; 
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+        }
+        
+        /* 🟢 새로운 래퍼 스타일: 모든 콘텐츠를 감싸고 푸터로부터 격리 */
+        .content-wrapper {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 0 20px;
+            /* 🚨 패딩을 500px로 극단적으로 늘림 (안전 마진) */
+            padding-bottom: 500px; 
+            margin-bottom: 0; 
+            position: relative;
+        }
+        
+        .container {
+            padding: 0; 
+            margin: 0;
+        }
+
+
+        /* 입력 및 버튼 스타일 */
+        .input-section { padding-bottom: 20px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group.inline { display: flex; justify-content: space-between; align-items: center; }
+        .form-group.inline input { width: 45%; }
+        
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input[type="number"], input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        #calculateBtn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            width: 100%;
+            margin-top: 10px;
+        }
+        #calculateBtn:hover {
+            background-color: #16a085;
+        }
+
+        /* 결과 섹션 스타일 */
+        .result-section { margin-top: 40px; padding-top: 20px; border-top: 1px dashed var(--border-color); }
+        #summary strong { font-size: 1.1em; color: var(--primary-color); }
+        .status-violation { color: #e74c3c; font-weight: bold; }
+        .status-compliant { color: var(--primary-color); font-weight: bold; }
+
+        /* AdSense 광고 컨테이너 스타일 */
+        .ad-container {
+            width: 100%;
+            min-height: 100px; 
+            margin: 20px 0;
+            text-align: center;
+            background-color: var(--secondary-bg);
+            border: 1px dashed #ccc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.8em;
+            color: #888;
+        }
+
+        /* SEO 정보 섹션 (Info-Section) 개선 */
+        .info-section {
+            margin-top: 40px;
+            padding: 20px; 
+            background-color: var(--secondary-bg); 
+            border-radius: 8px; 
+            border: 1px solid var(--border-color); 
+            position: relative;
+            z-index: 1000; /* 콘텐츠가 위에 오도록 강제 */
+        }
+
+        .info-section h2 { color: var(--primary-color); margin-top: 0; margin-bottom: 15px; padding-bottom: 5px; border-bottom: 2px solid var(--primary-color); }
+        .info-section ul, .info-section dl { list-style-type: none; padding-left: 0; }
+        .info-section dt { font-weight: bold; margin-top: 15px; padding-left: 10px; border-left: 3px solid var(--primary-color); }
+        .info-section dd { margin-left: 0; padding: 5px 0 10px 10px; border-bottom: 1px dotted var(--light-border); }
+
+        /* 🚨 Footer 역할을 하는 div 스타일 (footer 태그 없음) */
+        .content-footer-area {
+            margin: 0 auto; /* 중앙 정렬 유지 */
+            width: 100%;
+            max-width: 800px; /* 컨테이너 너비와 일치 */
+            padding: 15px 20px;
+            text-align: center;
+            background-color: var(--primary-color);
+            color: white;
+            position: relative; 
+            z-index: 1; 
+            box-sizing: border-box;
+        }
+        .content-footer-area a {
+            color: white;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+    </style>
 </head>
 <body>
-
     <header>
-        <h1>법정 근로시간 계산기</h1>
-        <p>주 52시간 상한제를 기준으로 초과 근무 시간을 계산하고 위반 여부를 확인합니다.</p>
+        <h1>근로시간 계산기</h1>
+        <p>주 52시간 근무제 준수 여부 및 연장/야간 근로 수당을 계산합니다.</p>
     </header>
 
+    <div class="content-wrapper">
     <main class="container">
         
         <div class="ad-container top-ad">
@@ -24,35 +158,39 @@
 
         <section class="input-section">
             <div class="form-group">
-                <label for="workDays">주간 근무 일수 (예: 5일)</label>
-                <input type="number" id="workDays" value="5" min="1" max="7">
+                <label for="baseWage">시급 (세전, ₩):</label>
+                <input type="number" id="baseWage" value="10000" min="9860" step="10">
             </div>
+            
             <div class="form-group">
-                <label for="dailyStartTime">일일 근무 시작 시 (24시간제)</label>
-                <input type="number" id="dailyStartTime" value="9" min="0" max="23">
+                <label>평일 주간 근로 시간 (월~금, 일일 8시간 초과분 제외):</label>
+                <input type="number" id="weekdayHours" value="40" min="0" max="52" step="0.5">
             </div>
+            
             <div class="form-group">
-                <label for="dailyEndTime">일일 근무 종료 시 (24시간제)</label>
-                <input type="number" id="dailyEndTime" value="18" min="0" max="23">
+                <label>평일 연장 근로 시간:</label>
+                <input type="number" id="overtimeHours" value="5" min="0" step="0.5">
             </div>
+
             <div class="form-group">
-                <label for="dailyBreak">일일 휴게 시간 (분)</label>
-                <input type="number" id="dailyBreak" value="60" min="0">
+                <label>야간 근로 시간 (밤 10시 ~ 새벽 6시):</label>
+                <input type="number" id="nightHours" value="0" min="0" step="0.5">
             </div>
-            <button id="calculateBtn">근로시간 확인하기</button>
+
+            <div class="form-group">
+                <label>휴일 근로 시간 (주휴일 포함):</label>
+                <input type="number" id="holidayHours" value="0" min="0" step="0.5">
+            </div>
+
+            <button id="calculateBtn">계산 시작</button>
         </section>
 
         <section class="result-section">
-            <h2>⏱️ 계산 결과 요약</h2>
+            <h2>📊 주간 근로 결과</h2>
             <div id="summary">
-                <p>총 주간 근로시간: <strong id="weeklyHours">0.0 시간</strong></p>
-                <p>법정 기준 (40시간) 초과 근무: <strong id="overtimeHours">0.0 시간</strong></p>
-                <p>52시간 위반 여부: <strong id="complianceStatus">미확인</strong></p>
-            </div>
-
-            <h2>⚠️ 법정 근로시간 준수 여부</h2>
-            <div id="statusDetail">
-                <p>입력값을 기준으로 주간 근로시간을 계산합니다.</p>
+                <p>주간 총 근로 시간: <strong id="totalHours">N/A</strong></p>
+                <p>52시간 준수 여부: <strong id="complianceStatus">N/A</strong></p>
+                <p>예상 주간 총 수당: <strong id="totalPay">N/A</strong></p>
             </div>
         </section>
         
@@ -60,37 +198,37 @@
             </div>
 
         <section class="info-section">
-            <h2 id="principle">⚖️ 주 52시간제와 법정 근로시간 원리</h2>
+            <h2 id="principle">⚖️ 주 52시간제 및 수당 계산 원리</h2>
             <p>
-                대한민국 근로기준법상 법정 근로시간은 **주 40시간**이며, 당사자 간 합의에 따라 연장할 수 있는 근로시간은 **주 12시간**을 한도로 합니다. 따라서 최대 주간 근로시간은 **52시간**입니다.
+                주 52시간제는 기본 근로 40시간과 연장 근로 12시간을 합산한 최대 근로 시간을 의미합니다. 이 계산기는 시급과 근로 유형별 할증률(연장 1.5배, 야간 1.5배, 휴일 1.5~2.0배)을 적용하여 예상 수당을 시뮬레이션합니다.
             </p>
-            <p>
-                휴게 시간은 근로시간에 포함되지 않습니다. 4시간 근무 시 30분 이상, 8시간 근무 시 1시간 이상의 휴게 시간을 주어야 합니다. 이 계산기는 입력된 휴게 시간을 제외하고 순수 근로시간만 계산합니다.
-            </p>
-
-            <h2 id="faq">❓ 자주 묻는 질문: 근로시간 계산</h2>
+            
+            <h2 id="faq">💡 근로 기준법 Q&A</h2>
             <dl>
-                <dt>Q: 출퇴근 시간 계산 시 유의할 점은 무엇인가요?</dt>
-                <dd>A: 계산기는 입력된 '시작 시'와 '종료 시' 사이의 시간을 기준으로 계산하며, 이 시간 내에 휴게 시간이 포함되어야 합니다. 또한, 24시간제를 기준으로 입력해야 정확합니다.</dd>
+                <dt>Q: 52시간 초과 시 법적 문제는?</dt>
+                <dd>A: 상시 근로자 5인 이상 사업장의 경우 52시간을 초과하는 근로를 시키면 근로기준법 위반에 해당하며, 고용노동부에 신고할 수 있습니다.</dd>
                 
-                <dt>Q: 주 52시간을 초과하면 어떻게 되나요?</dt>
-                <dd>A: 상시 근로자 5인 이상 사업장에서 주 52시간을 초과하여 근로시키는 것은 근로기준법 위반에 해당하며, 사업주는 형사 처벌을 받을 수 있습니다.</dd>
+                <dt>Q: 연장 근로 수당 계산은?</dt>
+                <dd>A: 1일 8시간 또는 1주 40시간을 초과하는 근로에 대해서는 통상 임금의 **50% 이상을 가산**하여 지급해야 합니다. (총 1.5배)</dd>
             </dl>
+            
+            <p class="disclaimer">
+                <small>면책 고지: 본 계산 결과는 근로 기준법 참고용이며, 실제 지급되는 임금이나 법적 효력을 보장하지 않습니다. 정확한 정보는 노무사와 상담하십시오.</small>
+            </p>
         </section>
 
         <div class="ad-container bottom-ad">
             </div>
         
+        <div class="content-footer-area">
+            <p>&copy; 2024 beekayutil.com</p>
+            <p>
+                <a href="https://beekayutil.com" target="_blank">SEO 분석기</a> | 
+                <a href="https://json.beekayutil.com" target="_blank">JSON 변환기</a> |
+                <a href="https://compound.beekayutil.com" target="_blank">복리 계산기</a>
+            </p>
+        </div>
     </main>
-
-    <footer>
-        <p>&copy; 2024 beekayutil.com</p>
-        <p>
-            <a href="https://beekayutil.com" target="_blank">SEO 콘텐츠 분석기</a> | 
-            <a href="https://json.beekayutil.com" target="_blank">JSON/YAML 변환기</a>
-        </p>
-    </footer>
-
-    <script src="script.js"></script>
+    </div> <script src="script.js"></script>
 </body>
 </html>
